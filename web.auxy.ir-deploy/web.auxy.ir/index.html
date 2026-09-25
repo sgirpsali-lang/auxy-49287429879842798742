@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<link rel="icon" href="/auxy-black.png" type="image/png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auxy</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<style>html{background:#000;visibility:hidden}</style>
+</head><body>
+<script>
+(function(){
+  function load(src){return new Promise(function(ok,no){var s=document.createElement('script');s.src=src;s.async=true;s.onload=ok;s.onerror=no;document.head.appendChild(s);});}
+  (async function(){
+    try{
+      if(!window.supabase){var urls=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.js','https://unpkg.com/@supabase/supabase-js@2.117.1/dist/umd/supabase.js'],ok=false;for(var i=0;i<urls.length;i++){try{await load(urls[i]);ok=true;break;}catch(e){}}if(!ok)throw new Error('auth library');}
+      await load('/js/auth.js?v=main-20260925-final4');
+      var A=window.AUXY;if(!A||!A.client)throw new Error('auth client');
+      var s=await A.getSession();var p=location.pathname.replace(/\/+$/,'')||'/';if(s){var reserved={login:1,home:1,chat:1,scroll:1,search:1,settings:1,studio:1,admin:1,notifications:1,saved:1,browser:1,invite:1,x:1,api:1};if(/^\/[a-z][a-z0-9_]{2,23}$/.test(p)&&!reserved[p.slice(1).toLowerCase()]){location.replace(A.HOME_PATH+'#/r/'+encodeURIComponent(p.slice(1)));return;}var gm=p.match(/^\/invite\/(group|channel)\/([^/]+)$/);if(gm){location.replace(A.HOME_PATH+(gm[1]==='group'?'#/gjoin/':'#/join/')+encodeURIComponent(gm[2]));return;}var xm=p.match(/^\/x\/([^/]+)\/([^/]+)$/);if(xm){location.replace(A.HOME_PATH+'#/x/'+encodeURIComponent(xm[1])+'/'+encodeURIComponent(xm[2]));return;}location.replace(A.HOME_PATH);}else{location.replace(A.LOGIN_PATH);}
+    }catch(e){location.replace('/login/');}
+  })();
+})();
+</script>
+</body></html>

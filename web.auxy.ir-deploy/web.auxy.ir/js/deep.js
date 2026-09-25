@@ -1,0 +1,4 @@
+/* Auxy: long-form share links */
+(function(){'use strict';var A=window.AUXY,C=A.core,sb=A.client;A.mod.deep={open:open};
+async function open(ctx){var el=ctx.el,k=String(ctx.params.kind||''),id=String(ctx.params.id||''),route=null;if(k==='movie')route='/movie/'+id;else if(k==='post')route='/scroll/'+id;else if(k==='series')route='/series/'+id;else if(k==='episode')route='/episode/'+id;else if(k==='user')route='/r/'+id;else if(k==='group'||k==='channel')route='/chat/'+id;else if(k==='message'){var r=await sb.from('messages').select('id,conversation_id').eq('id',id).maybeSingle();if(r.error||!r.data){el.innerHTML=C.empty('link','پیام پیدا نشد','');return;}route='/chat/'+r.data.conversation_id+'?msg='+encodeURIComponent(id);}else{el.innerHTML=C.empty('link','لینک نامعتبر است','');return;}C.go(route);}
+})();

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ورود | Auxy</title>
+<meta name="description" content="ورود امن به Auxy با نام کاربری و رمز عبور.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="/auxy-black.png" type="image/png">
+
+<style>
+  :root{
+    --black:#000; --white:#fff;
+    --g2:#1a1a1a; --g3:#2b2b2b; --g4:#8a8a8a; --g5:#a3a3a3; --g6:#e7e7e7;
+    --font:'Vazirmatn',Tahoma,'Segoe UI',sans-serif;
+    --ease:cubic-bezier(.2,.8,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--black);color:var(--white);font-family:var(--font);line-height:1.9;overflow:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  button{font-family:inherit}
+  :focus-visible{outline:3px solid var(--white);outline-offset:4px;border-radius:10px}
+
+  /* ---------- 3D poster wall ---------- */
+  .scene{position:fixed;inset:0;z-index:0;perspective:1500px;perspective-origin:50% 40%;overflow:hidden}
+  .plane{position:absolute;top:50%;left:50%;width:1300px;height:1400px;transform-style:preserve-3d;transform:translate(-50%,-50%) rotateX(54deg) rotateZ(-18deg);will-change:transform;display:flex;gap:16px;direction:ltr;opacity:.7}
+  .col{width:130px;height:100%;overflow:hidden;flex:none}
+  .track{display:flex;flex-direction:column;gap:16px;animation:rise 60s linear infinite}
+  .col:nth-child(even) .track{animation-direction:reverse}
+  @keyframes rise{to{transform:translateY(-50%)}}
+  .tile{flex:none;height:195px;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+  .v0{background:linear-gradient(160deg,#202020,#0a0a0a)}
+  .v1{background:linear-gradient(160deg,#454545,#151515)}
+  .v2{background:linear-gradient(160deg,#f4f4f4,#8f8f8f)}
+  .v3{background:radial-gradient(circle at 68% 30%,#fff 0 17%,transparent 18%),#141414}
+  .v4{background:repeating-linear-gradient(90deg,#262626 0 6px,#101010 6px 12px)}
+  .v5{background:linear-gradient(135deg,transparent 50%,#e8e8e8 50% 62%,transparent 62%),#191919}
+  .shade{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 55% 60% at 50% 50%,rgba(0,0,0,.86) 0,rgba(0,0,0,.55) 55%,rgba(0,0,0,.92) 100%)}
+  .glow{position:fixed;top:0;left:0;width:620px;height:620px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(255,255,255,.12),rgba(255,255,255,0) 62%);opacity:0;transition:opacity .4s;will-change:transform}
+  .glow.on{opacity:1}
+
+  /* ---------- top bar ---------- */
+  .top{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:22px 5%}
+  .top img{height:28px;width:auto}
+  .top a.site{font-size:.92rem;color:var(--g5);text-decoration:none;transition:color .2s}
+  .top a.site:hover{color:var(--white)}
+
+  /* ---------- card ---------- */
+  .center{position:fixed;inset:0;z-index:4;display:grid;place-items:center;padding:84px 20px 60px;overflow-y:auto}
+  .card{position:relative;width:min(440px,100%);padding:46px 38px 34px;border-radius:30px;background:rgba(10,10,10,.72);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 60px 80px -40px rgba(0,0,0,.9);text-align:center;transform-style:preserve-3d;transition:transform .25s var(--ease),opacity .35s;will-change:transform;animation:enter .9s var(--ease) backwards}
+  @keyframes enter{from{opacity:0;transform:translateY(34px) scale(.97)}to{opacity:1;transform:none}}
+  .card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.14),transparent 46%);opacity:0;transition:opacity .3s}
+  .card.hov::after{opacity:1}
+  .mark{display:block;height:58px;width:auto;margin:0 auto 22px;transform:translateZ(50px);filter:drop-shadow(0 16px 28px rgba(255,255,255,.22))}
+  h1{font-weight:900;font-size:1.75rem;line-height:1.5;margin-bottom:8px;transform:translateZ(30px)}
+  .sub{color:var(--g5);font-size:1rem;margin-bottom:30px;transform:translateZ(20px)}
+
+
+  .err{margin-top:16px;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:var(--g6);font-size:.92rem;text-align:start}
+  .err[hidden]{display:none}
+  .hint{margin-top:22px;color:var(--g4);font-size:.86rem}
+  .legal{margin-top:8px;color:var(--g4);font-size:.82rem;line-height:1.9}
+  .legal a{color:var(--g5);text-decoration:underline;text-underline-offset:4px}
+  .legal a:hover{color:var(--white)}
+
+  /* ---------- states ---------- */
+  .splash{position:fixed;inset:0;z-index:6;display:grid;place-items:center;background:var(--black);transition:opacity .35s;pointer-events:none}
+  .splash img{height:56px;width:auto;animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35;transform:scale(.94)}}
+  body[data-state="ready"] .splash{opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s}
+  body[data-state="checking"] .card,
+  body[data-state="redirecting"] .card{opacity:0}
+
+  @media(max-width:520px){
+    .card{padding:38px 24px 28px;border-radius:26px}
+    h1{font-size:1.5rem}
+    .plane{width:1000px;height:1200px}
+    .col{width:96px}
+    .tile{height:144px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .track,.card,.splash img{animation:none!important}
+    .card{transition:none}
+  }
+</style>
+<style>
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:15px;margin:0 0 20px}.tab{border:0;background:transparent;color:#aaa;padding:10px 5px;border-radius:11px;cursor:pointer;font-family:inherit}.tab.active{background:#fff;color:#111;font-weight:700}.field{display:block;text-align:right;margin:12px 0}.field span{display:block;color:#bbb;font-size:.82rem;margin:0 5px 6px}.field input{width:100%;height:54px;border:1px solid rgba(255,255,255,.13);border-radius:15px;background:rgba(255,255,255,.06);color:#fff;padding:0 15px;font:inherit;outline:none}.field input:focus{border-color:rgba(255,255,255,.55);box-shadow:0 0 0 4px rgba(255,255,255,.06)}.submit{position:relative;width:100%;height:56px;margin-top:10px;border:0;border-radius:16px;background:#fff;color:#111;font:700 1rem inherit;cursor:pointer;transition:.2s}.submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 15px 35px rgba(255,255,255,.15)}.submit:disabled{opacity:.7}.submit i{display:none;width:19px;height:19px;border:2px solid #bbb;border-top-color:#111;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-inline-start:8px}.submit.loading i{display:inline-block}.success{padding:18px;border:1px solid rgba(255,255,255,.15);border-radius:16px;background:rgba(255,255,255,.06);margin-bottom:12px}.legal{margin-top:18px}.sub{margin-bottom:20px}
+</style></head>
+
+<body data-state="ready">
+<div class="scene" aria-hidden="true"><div class="plane" id="plane"></div></div><div class="shade"></div><div class="glow" id="glow"></div>
+<div class="top"><a href="https://auxy.ir"><img src="/auxy-wordmark-white.png" alt="Auxy" height="28"></a><a class="site" href="https://auxy.ir">auxy.ir</a></div>
+<main class="center"><section class="card" id="card">
+<img class="mark" src="/auxy-white.png" alt="" height="58">
+<h1 id="title">به Auxy خوش آمدید</h1><p class="sub" id="subtitle">با نام کاربری و رمز عبور وارد حساب خود شوید.</p>
+<div class="tabs"><button class="tab active" data-tab="login">ورود</button><button class="tab" data-tab="register">ثبت‌نام</button><button class="tab" data-tab="recover">بازیابی رمز</button></div>
+<form id="form" novalidate></form><div class="err" id="err" role="alert" hidden></div>
+<p class="legal">با ادامه، <a href="https://auxy.ir/terms" target="_blank">قوانین و مقررات</a> و <a href="https://auxy.ir/privacy" target="_blank">حریم خصوصی</a> Auxy را می‌پذیرید.</p>
+</section></main><div class="splash"><img src="/auxy-white.png" alt=""></div>
+<script>
+(function(){
+  'use strict';
+  var form=document.getElementById('form'),err=document.getElementById('err'),title=document.getElementById('title'),sub=document.getElementById('subtitle'),tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var currentMode='login', recoveryEmail='', authPromise=null, authFailed=null;
+  function showError(x){err.classList.remove('success-msg');err.textContent=x;err.hidden=false;}
+  function clearError(){err.classList.remove('success-msg');err.hidden=true;err.textContent='';}
+  function field(label,name,type,ph,extra){
+    var ac=name==='username'?'username':name==='password'?'current-password':name==='password2'?'new-password':'off';
+    return '<label class="field"><span>'+label+'</span><input name="'+name+'" type="'+type+'" placeholder="'+ph+'" autocomplete="'+ac+'" '+(extra||'')+' required></label>';
+  }
+  function button(txt){return '<button class="submit" type="submit">'+txt+'<i></i></button>';}
+  function render(tab){
+    currentMode=tab; clearError();
+    tabs.forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab);});
+    if(tab==='login'){
+      title.textContent='ورود به Auxy'; sub.textContent='نام کاربری و رمز عبورتان را وارد کنید.';
+      form.innerHTML=field('نام کاربری','username','text','@username','maxlength="24" autocapitalize="off" spellcheck="false" inputmode="latin"')+
+        field('رمز عبور','password','password','رمز عبور')+button('ورود');
+    } else if(tab==='register'){
+      title.textContent='ساخت حساب'; sub.textContent='نام کاربری، ایمیل بازیابی و یک رمز امن انتخاب کنید.';
+      form.innerHTML=field('نام کاربری','username','text','@username','maxlength="24" autocapitalize="off" spellcheck="false" inputmode="latin"')+
+        field('ایمیل بازیابی','email','email','you@example.com','dir="ltr"')+
+        field('رمز عبور','password','password','حداقل ۸ کاراکتر')+
+        field('تکرار رمز','password2','password','تکرار رمز')+button('ساخت حساب');
+    } else if(tab==='recover'){
+      title.textContent='بازیابی رمز عبور'; sub.textContent='ایمیل بازیابی را وارد کنید تا کد ۶ رقمی برایتان ارسال شود.';
+      form.innerHTML=field('ایمیل بازیابی','email','email','you@example.com','dir="ltr"')+button('ارسال کد تأیید');
+    } else {
+      title.textContent='کد تأیید ایمیل'; sub.textContent='کد ۶ رقمی ارسال‌شده به ایمیلتان را وارد کنید و رمز جدید بسازید.';
+      form.innerHTML=field('کد تأیید','token','text','۱۲۳۴۵۶','maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" dir="ltr"')+
+        field('رمز جدید','password','password','حداقل ۸ کاراکتر')+
+        field('تکرار رمز جدید','password2','password','تکرار رمز جدید')+
+        button('تغییر رمز')+
+        '<button type="button" class="submit secondary-submit" id="resend">ارسال دوباره کد</button>';
+      var token=form.querySelector('[name="token"]'); if(token) token.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'').slice(0,6);});
+      form.querySelector('#resend').onclick=async function(){
+        if(!recoveryEmail)return;
+        this.disabled=true; clearError();
+        try{var A=await waitForAuth(); await A.sendRecoveryCode(recoveryEmail); showSuccess('کد جدید ارسال شد.');}
+        catch(e){showError(errorText(e));}
+        this.disabled=false;
+      };
+    }
+  }
+  function showSuccess(x){err.textContent=x;err.hidden=false;err.classList.add('success-msg');}
+  function errorText(e){
+    var c=e&&e.code||'',m=String(e&&e.message||'').toLowerCase();
+    if(c==='username_required')return 'نام کاربری را وارد کنید.';
+    if(c==='password_required')return 'رمز عبور را وارد کنید.';
+    if(c==='username_not_found')return 'این نام کاربری پیدا نشد.';
+    if(c==='invalid_credentials')return 'نام کاربری یا رمز عبور نادرست است.';
+    if(c==='email_not_confirmed')return 'ایمیل حساب تأیید نشده است. ابتدا ایمیل تأیید را باز کنید.';
+    if(c==='username_taken'||c==='taken')return 'این نام کاربری قبلاً گرفته شده است.';
+    if(c==='reserved')return 'این نام کاربری قابل انتخاب نیست.';
+    if(c==='email_required')return 'ایمیل بازیابی را وارد کنید.';
+    if(c==='email_already_registered')return 'این ایمیل قبلاً ثبت شده است.';
+    if(c==='password_too_short')return 'رمز عبور باید حداقل ۸ کاراکتر باشد.';
+    if(c==='invalid_otp')return 'کد باید ۶ رقم باشد.';
+    if(c==='account_banned')return 'این حساب مسدود شده است.';
+    if(c==='supabase_library_unavailable'||c==='auth_library_load_failed')return 'سرویس ورود بارگذاری نشد. اتصال اینترنت را بررسی و صفحه را تازه‌سازی کنید.';
+    if(m.indexOf('email rate limit')>-1||m.indexOf('rate limit')>-1)return 'تعداد درخواست‌ها زیاد شده است. کمی بعد دوباره امتحان کنید.';
+    if(m.indexOf('captcha')>-1)return 'تأیید امنیتی سرویس فعال است. دوباره تلاش کنید.';
+    return 'عملیات انجام نشد. لطفاً اطلاعات را بررسی و دوباره امتحان کنید.';
+  }
+  function loadScript(src){
+    return new Promise(function(resolve,reject){
+      var s=document.createElement('script'); s.src=src; s.async=true;
+      s.onload=function(){resolve();}; s.onerror=function(){reject(new Error('load_failed'));};
+      document.head.appendChild(s);
+    });
+  }
+  function initAuth(){
+    if(authPromise)return authPromise;
+    authPromise=(async function(){
+      if(!window.supabase){
+        var urls=[
+          'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.js',
+          'https://unpkg.com/@supabase/supabase-js@2.117.1/dist/umd/supabase.js'
+        ];
+        var ok=false;
+        for(var i=0;i<urls.length;i++){
+          try{await loadScript(urls[i]);ok=true;break;}catch(e){}
+        }
+        if(!ok){var e=new Error('auth_library_load_failed');e.code='auth_library_load_failed';throw e;}
+      }
+      await loadScript('/js/auth.js?v=main-20260925-final4');
+      if(!window.AUXY||!window.AUXY.client){var e2=new Error('supabase_library_unavailable');e2.code='supabase_library_unavailable';throw e2;}
+      return window.AUXY;
+    })().catch(function(e){authFailed=e;authPromise=null;throw e;});
+    return authPromise;
+  }
+  function waitForAuth(){
+    if(window.AUXY&&window.AUXY.client)return Promise.resolve(window.AUXY);
+    return initAuth();
+  }
+  async function submitLogin(fd){
+    var b=form.querySelector('.submit');b.disabled=true;b.classList.add('loading');clearError();
+    try{var A=await waitForAuth();await A.signInWithUsername(fd.get('username'),fd.get('password'));window.location.replace(A.HOME_PATH);}
+    catch(e){showError(errorText(e));b.disabled=false;b.classList.remove('loading');}
+  }
+  async function submitRegister(fd){
+    var b=form.querySelector('.submit');b.disabled=true;b.classList.add('loading');clearError();
+    var u=String(fd.get('username')||'').replace(/^@+/,'').trim().toLowerCase(),email=String(fd.get('email')||'').trim().toLowerCase(),p=String(fd.get('password')||'');
+    if(p!==String(fd.get('password2')||'')){showError('تکرار رمز عبور یکسان نیست.');b.disabled=false;b.classList.remove('loading');return;}
+    if(p.length<8){showError('رمز عبور باید حداقل ۸ کاراکتر باشد.');b.disabled=false;b.classList.remove('loading');return;}
+    try{
+      var A=await waitForAuth(),d=await A.register(u,p,email,u);
+      if(d.session){window.location.replace(A.HOME_PATH);return;}
+      form.innerHTML='<div class="success">حساب با موفقیت ساخته شد.<br><br>در صورتی که تأیید ایمیل در Supabase فعال است، ایمیل تأیید را باز کنید و سپس با نام کاربری و رمز وارد شوید.</div><button class="submit" type="button" id="back">بازگشت به ورود</button>';
+      document.getElementById('back').onclick=function(){render('login');};
+    }catch(e){showError(errorText(e));b.disabled=false;b.classList.remove('loading');}
+  }
+  async function submitRecover(fd){
+    var b=form.querySelector('.submit');b.disabled=true;b.classList.add('loading');clearError();recoveryEmail=String(fd.get('email')||'').trim().toLowerCase();
+    try{var A=await waitForAuth();await A.sendRecoveryCode(recoveryEmail);render('recover-code');showSuccess('کد تأیید برای ایمیل شما ارسال شد.');}
+    catch(e){showError(errorText(e));b.disabled=false;b.classList.remove('loading');}
+  }
+  async function submitRecoverCode(fd){
+    var b=form.querySelector('.submit');b.disabled=true;b.classList.add('loading');clearError();
+    var token=String(fd.get('token')||'').replace(/\D/g,'').slice(0,6),p=String(fd.get('password')||''),p2=String(fd.get('password2')||'');
+    if(token.length!==6){showError('کد تأیید باید ۶ رقم باشد.');b.disabled=false;b.classList.remove('loading');return;}
+    if(p.length<8){showError('رمز جدید باید حداقل ۸ کاراکتر باشد.');b.disabled=false;b.classList.remove('loading');return;}
+    if(p!==p2){showError('تکرار رمز جدید یکسان نیست.');b.disabled=false;b.classList.remove('loading');return;}
+    try{var A=await waitForAuth();await A.verifyRecoveryCode(recoveryEmail,token,p);window.location.replace(A.HOME_PATH);}
+    catch(e){showError(errorText(e));b.disabled=false;b.classList.remove('loading');}
+  }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();var fd=new FormData(form);
+    if(currentMode==='login')return submitLogin(fd);
+    if(currentMode==='register')return submitRegister(fd);
+    if(currentMode==='recover')return submitRecover(fd);
+    if(currentMode==='recover-code')return submitRecoverCode(fd);
+  });
+  tabs.forEach(function(t){t.addEventListener('click',function(){render(t.dataset.tab);});});
+
+  /* Render immediately. Auth is deliberately loaded after the controls exist. */
+  render('login');
+  document.body.setAttribute('data-state','ready');
+
+  /* Start auth in the background so a signed-in user still jumps to Home. */
+  initAuth().then(function(A){return A.getSession();}).then(function(s){if(s&&window.AUXY)window.location.replace(window.AUXY.HOME_PATH);}).catch(function(e){console.warn('[Auxy] auth init:',e);});
+
+  /* visual wall */
+  var plane=document.getElementById('plane'),seed=23;function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647;}var pool=['v0','v0','v1','v0','v4','v3','v1','v0','v5','v2'];
+  for(var c=0;c<10;c++){var col=document.createElement('div');col.className='col';var tr=document.createElement('div');tr.className='track';for(var r=0;r<14;r++){var tile=document.createElement('div');tile.className='tile '+pool[Math.floor(rnd()*pool.length)];tr.appendChild(tile);}tr.style.animationDuration=(46+Math.floor(rnd()*40))+'s';col.appendChild(tr);plane.appendChild(col);}
+})();
+</script></body></html>
